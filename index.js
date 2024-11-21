@@ -1,7 +1,15 @@
 'use strict';
 
 const express = require('express');
+const cors = require("cors")
 const app = express();
+
+const corsOptions = {
+  origin: '*',
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
 
 // define endpoint for exercise 1 here
 app.get('/math/circle/:r', (req, res) => {
@@ -92,11 +100,11 @@ let lameJoke = [
   }
 ];
 
-app.get('/jokebook/categories', (req, res) => {
+app.get('/jokebook/categories', cors(corsOptions), (req, res) => {
   res.json(categories);
 });
 
-app.get('/jokebook/joke/:category', (req, res) => {
+app.get('/jokebook/joke/:category', cors(corsOptions),(req, res) => {
   const category = req.params.category;
   let jokes;
 

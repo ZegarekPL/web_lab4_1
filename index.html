@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Joke Book</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    .container {
+      margin-top: 50px;
+    }
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .joke-container {
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      display: inline-block;
+      width: 80%;
+      max-width: 400px;
+    }
+    .joke-container p {
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+<h1>Joke Book</h1>
+<p>Choose a category and enjoy a random joke!</p>
+
+<div class="container">
+  <button id="funnyJokeBtn">Get a Funny Joke</button>
+  <button id="lameJokeBtn">Get a Lame Joke</button>
+</div>
+
+<div class="joke-container" id="jokeContainer" style="display: none;">
+  <p><strong>Joke:</strong> <span id="jokeText"></span></p>
+  <p><strong>Response:</strong> <span id="jokeResponse"></span></p>
+</div>
+
+<script>
+  const jokeContainer = document.getElementById('jokeContainer');
+  const jokeText = document.getElementById('jokeText');
+  const jokeResponse = document.getElementById('jokeResponse');
+
+  document.getElementById('funnyJokeBtn').addEventListener('click', () => {
+    fetchJoke('funnyJoke');
+  });
+
+  document.getElementById('lameJokeBtn').addEventListener('click', () => {
+    fetchJoke('lameJoke');
+  });
+
+  function fetchJoke(category) {
+    console.log(`localhost:3000/jokebook/joke/${category}`)
+    fetch(`http://localhost:3000/jokebook/joke/${category}`)
+            .then(response => {
+              if (!response.ok) {
+                throw new Error(`Error: ${response.status}`);
+              }
+              return response.json();
+            })
+            .then(data => {
+              jokeText.textContent = data.joke;
+              jokeResponse.textContent = data.response;
+              jokeContainer.style.display = 'block';
+            })
+            .catch(error => {
+              console.error('Error fetching joke:', error);
+              jokeText.textContent = 'Oops! Unable to fetch a joke right now.';
+              jokeResponse.textContent = '';
+              jokeContainer.style.display = 'block';
+            });
+  }
+</script>
+</body>
+</html>
